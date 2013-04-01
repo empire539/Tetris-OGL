@@ -1,19 +1,29 @@
-#include <Windows.h>
+#pragma warning(disable:4996) // Disable deprecated functions warning
 
-/**
- * The main game class to encapsulate the message queue
- */
-class Game {
-public:
-	Game(HINSTANCE hInstance);
-	~Game();
+#include "Game.h"
+#include <string>
 
-	void getArgs(LPSTR args);
-	void run();
+/** Constructor. */
+Game::Game(HINSTANCE hInstance)
+	:m_hInstance(hInstance), 
+	 m_bFullscreen(false) {
+}
 
-private:
-	static const int FRAME_TIME = 75; // ms
+/** Deconstructor. */
+Game::~Game() {}
 
-	HINSTANCE m_hInstance;
-	bool bFullscreenFlag;
-};
+void Game::getArgs(LPSTR args) {
+	LPSTR argList = strtok(args, " ");
+
+	while (argList) {
+		if (!stricmp(argList, "-fullscreen")) {
+			m_bFullscreen = true;
+		}
+
+		argList = strtok(NULL, " ");
+	}
+}
+
+void Game::run() {
+
+}
