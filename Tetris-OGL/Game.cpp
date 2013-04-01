@@ -1,7 +1,7 @@
 #pragma warning(disable:4996) // Disable deprecated functions warning
 
-#include "Game.h"
 #include <string>
+#include "Game.h"
 
 #define SWITCH_FULLSCREEN "-fullscreen"
 #define WINDOW_WIDTH 800

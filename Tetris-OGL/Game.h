@@ -1,5 +1,5 @@
-#ifndef GAME_HEADER
-#define GAME_HEADER
+#ifndef GAME_H
+#define GAME_H
 
 #include <Windows.h>
 
