@@ -1,5 +1,6 @@
 [Bb]in
 [Dd]ebug*/
+ipch/
 obj/
 _ReSharper*/
 [Rr]elease*/
@@ -21,6 +22,7 @@ $tf*/
 *.pdb
 *.sbr
 *.sdf
+*.sln
 *.sln.docstates
 *.suo
 *.tlb
