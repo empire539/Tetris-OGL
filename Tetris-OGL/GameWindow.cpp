@@ -164,11 +164,38 @@ void GameWindow::onSize(GLsizei width, GLsizei height) {
 }
 
 LRESULT GameWindow::onEvent(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) {
+	// Since this method is static, it cannot access nonstatic members.
+	// Create a structure CREATESTRUCT that contains window creation information.
+	// SetWindowLongPtr saves user data for a specific window to the class instance.
+	
+	if (message == WM_NCCREATE) {
+		CREATESTRUCT* pCreateStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
+		SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<long>(pCreateStruct->lpCreateParams));
+	}
 
+	// Get the window instance corresponding to the handle
+	GameWindow* pWindow = reinterpret_cast<GameWindow*>(GetWindowLongPtr(handle, GWLP_USERDATA));
+
+	if (pWindow) {
+		pWindow->processEvent(message, wParam, lParam);
+	}
+
+	return DefWindowProc(handle, message, wParam, lParam);
 }
 
 void GameWindow::processEvent(UINT message, WPARAM wParam, LPARAM lParam) {
-
+	switch (message) {
+		case WM_CLOSE:
+			PostQuitMessage(0);
+			break;
+		case WM_SIZE:
+			onSize(LOWORD(lParam), HIWORD(lParam));
+			break;
+		case WM_KEYDOWN:
+			break;
+		case WM_KEYUP:
+			break;
+	}
 }
 
 void GameWindow::update(DWORD currentTime) {
@@ -176,5 +203,5 @@ void GameWindow::update(DWORD currentTime) {
 }
 
 void GameWindow::draw() {
-
+	
 }
