@@ -114,15 +114,53 @@ void GameWindow::registerWindowClass() {
 }
 
 void GameWindow::createGraphicsContext() {
-	
+	PIXELFORMATDESCRIPTOR pfd;
+	memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;					// Version number
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW	// Draw to window
+				| PFD_SUPPORT_OPENGL	// Must support OpenGL
+				| PFD_DOUBLEBUFFER;		// Support double buffering
+	pfd.iPixelType = PFD_TYPE_RGBA;		// RGBA pixel format
+	pfd.cColorBits = 32;				// 32 bits of color
+
+	if (!(m_hDeviceContext = GetDC(m_hWindow))) {
+		throw GameException("RC: Cannot retrieve device context");
+	}
+
+	int pxlFormat;
+
+	if (!(pxlFormat = ChoosePixelFormat(m_hDeviceContext, &pfd))) {
+		throw GameException("RC: Cannot find matching pixel format");
+	}
+	if (!SetPixelFormat(m_hDeviceContext, pxlFormat, &pfd) {
+		throw GameException("RC: Pixel format could not be set");
+	}
+	if (!(m_hGlContext = wglCreateContext(m_hDeviceContext))) {
+		throw GameException("RC: Cannot create OpenGL rendering context");
+	}
+	if (!wglMakecurrent(m_hDeviceContext, m_hGlContext)) {
+		throw GameException("Could not make the rendering context current");
+	}
 }
 
 void GameWindow::initGraphics() {
-
+	glEnable(GL_TEXTURE_2D);			// 2D texturing
+	glShadeModel(GL_SMOOTH);			// Smooth shade model
+	glClearColor(0.0, 0.0, 0.0, 0.0);	// Black clear color
+	glEnable(GL_ALPHA_TEST);			// Enables transparency 
+	glAlphaFunc(GL_GREATER, 0.0f);		// in images
 }
 
-void GameWindow::onSize() {
+void GameWindow::onSize(GLsizei width, GLsizei height) {
+	// Sets size of the OpenGL viewport
+	glViewport(0, 0, width, height);
 
+	// Select projection stack, apply orthographic projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0, width, height, 0.0, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 LRESULT GameWindow::onEvent(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -133,7 +171,7 @@ void GameWindow::processEvent(UINT message, WPARAM wParam, LPARAM lParam) {
 
 }
 
-void GameWindow::update() {
+void GameWindow::update(DWORD currentTime) {
 
 }
 
