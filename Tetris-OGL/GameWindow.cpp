@@ -73,15 +73,48 @@ GameWindow::GameWindow(int width, int height, bool fullscreen)
 
 /** Deconstructor. */
 GameWindow::~GameWindow() {
+	// Exit out of full screen mode
+	if (m_bFullscreen) {
+		ChangeDisplaySettings(NULL, 0);
+		ShowCursor(TRUE);
+	}
 
+	// Destroy the OpenGL rendering context
+	if (m_hGlContext) {
+		wglMakeCurrent(NULL, NULL);
+		wglDeleteContext(m_hGlContext);
+		m_hGlContext = NULL;
+	}
+
+	// Release the device context
+	if (m_hDeviceContext) {
+		ReleaseDC(m_hWindow, m_hDeviceContext);
+		m_hDeviceContext = NULL;
+	}
+
+	// Destroy the game window, unregister window class
+	DestroyWindow(m_hWindow);
+	UnregisterClass(TEXT(WINDOW_NAME), GetModuleHandle(NULL));
 }
 
 void GameWindow::registerWindowClass() {
+	WNDCLASS winClass;
+	winClass.style			= 0;
+	winClass.lpfnWndProc	= &GameWindow::onEvent;
+	winClass.cbClsExtra		= 0;
+	winClass.cbWndExtra		= 0;
+	winClass.hInstance		= GetModuleHandle(NULL);
+	winClass.hIcon			= NULL;
+	winClass.hCursor		= 0;
+	winClass.hbrBackground	= 0;
+	winClass.lpszMenuName	= NULL;
+	winClass.lpszClassName	= WINDOW_NAME;
 
+	RegisterClass(&winClass);
 }
 
 void GameWindow::createGraphicsContext() {
-
+	
 }
 
 void GameWindow::initGraphics() {

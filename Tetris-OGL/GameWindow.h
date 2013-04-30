@@ -21,7 +21,7 @@ private:
 
 	HWND	m_hWindow;				// Window handle
 	HDC		m_hDeviceContext;		// Window device context
-	HGLRC	m_hGlContext			// OpenGL Context
+	HGLRC	m_hGlContext;			// OpenGL Context
 	
 	void registerWindowClass();
 	void createGraphicsContext();
