@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Game.h"
+#include "GameWindow.h"
 
 #define SWITCH_FULLSCREEN "-fullscreen"
 #define WINDOW_WIDTH 800
@@ -36,7 +37,7 @@ void Game::getArgs(LPSTR args) {
  * Processes any incoming messages and updates/draws the app window.
  */
 void Game::run() {
-	GameWindow gameWindow(WINDOW_WIDTH, WINDOW_HEIGHT, m_bFullScreen);
+	GameWindow gameWindow(WINDOW_WIDTH, WINDOW_HEIGHT, m_bFullscreen);
 
 	MSG winMessage;
 	winMessage.message = ~WM_QUIT;

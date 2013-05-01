@@ -1,14 +1,17 @@
-#include <Windows.h>
+#include "Game.h"
+#include "GameException.h"
 
 /**
  * The application entry point.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	try {
-		// TODO: fill in WinMain code
+		Game tetrisGame(hInstance);
+		tetrisGame.getArgs(lpCmdLine);
+		tetrisGame.run();
 	}
-	catch (Exception e) {
-		// TODO: fill in exception handling code
+	catch (GameException e) {
+		MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONEXCLAMATION);
 	}
 
 	return 0;

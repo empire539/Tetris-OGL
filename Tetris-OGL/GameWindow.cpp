@@ -1,3 +1,4 @@
+#include "GameException.h"
 #include "GameWindow.h"
 
 #define WINDOW_NAME "Tetris OGL"
@@ -36,7 +37,7 @@ GameWindow::GameWindow(int width, int height, bool fullscreen)
 		}
 
 		winExtStyle = WS_EX_APPWINDOW;
-		winStyle - WS_POPUP;
+		winStyle = WS_POPUP;
 
 		// Hide cursor in full screen mode
 		ShowCursor(FALSE);
@@ -133,13 +134,13 @@ void GameWindow::createGraphicsContext() {
 	if (!(pxlFormat = ChoosePixelFormat(m_hDeviceContext, &pfd))) {
 		throw GameException("RC: Cannot find matching pixel format");
 	}
-	if (!SetPixelFormat(m_hDeviceContext, pxlFormat, &pfd) {
+	if (!SetPixelFormat(m_hDeviceContext, pxlFormat, &pfd)) {
 		throw GameException("RC: Pixel format could not be set");
 	}
 	if (!(m_hGlContext = wglCreateContext(m_hDeviceContext))) {
 		throw GameException("RC: Cannot create OpenGL rendering context");
 	}
-	if (!wglMakecurrent(m_hDeviceContext, m_hGlContext)) {
+	if (!wglMakeCurrent(m_hDeviceContext, m_hGlContext)) {
 		throw GameException("Could not make the rendering context current");
 	}
 }
@@ -203,5 +204,24 @@ void GameWindow::update(DWORD currentTime) {
 }
 
 void GameWindow::draw() {
-	
+	// Test drawing - some rectangles and triangles
+
+	// Clear the buffer
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Here goes the drawing code
+	glBegin(GL_QUADS);
+		glColor3f(1.0,0.0,0.0);		glVertex3i(50,200,0);
+		glColor3f(0.0,1.0,0.0);		glVertex3i(250,200,0);
+		glColor3f(0.0,0.0,1.0);		glVertex3i(250,350,0);
+		glColor3f(1.0,1.0,1.0);		glVertex3i(50,350,0);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+		glColor3f(1.0,0.0,0.0);  glVertex3i(400,350,0);
+		glColor3f(0.0,1.0,0.0);  glVertex3i(500,200,0);
+		glColor3f(0.0,0.0,1.0);  glVertex3i(600,350,0);
+	glEnd();
+
+	SwapBuffers(m_hDeviceContext);
 }
